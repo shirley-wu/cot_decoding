@@ -86,11 +86,8 @@ def cot_decoding_solve(model, tokenizer, task, batch, args: DecodingArguments):
         return inds
 
     def get_cot_score(probs):
-        if args.cot_only_consider_top1:
-            score = float(probs.max(dim=-1).mean())
-        else:
-            probs = probs.topk(k=2, dim=-1, sorted=True).values
-            score = (probs[:, 0] - probs[:, 1]).mean()
+        probs = probs.topk(k=2, dim=-1, sorted=True).values
+        score = (probs[:, 0] - probs[:, 1]).mean()
         return float(score)
 
     ret = []
